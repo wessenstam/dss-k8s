@@ -36,7 +36,7 @@ For the syncer to work, make the nessecary changes to the two following yaml fil
 1. **CM_secrets.yaml**: In the secrets field, mention the secrets that need to be synchronized. Make sure to keep the format as shown. Otherwise the deployment in Kubernetes will throw an error
 
 > [!CAUTION]
-> Kubernetes does not allow secrets to have a domain or machinename in the name of the secret. When this tool is used, make sure the ConfigMap for the secrets that need to be synchronzied, does ONLY contain the username. The underlaying Python script will use THAT name to find the secret and synchronize the information into Kubernetes. If there are two or more secrets with the same username, **ONLY the first instance** will be synchronized in this version!!
+> Kubernetes does not allow secrets to have a domain or machinename in the name of the secret. When this tool is used, make sure the ConfigMap for the secrets that need to be synchronzied, **ONLY** contain the username. The underlaying Python script will use THAT username to find the secret in Secret Server and synchronize the password into Kubernetes if it exists, or create a new secret with the username and the password. If there are two or more secrets in Secret Server that match the username, **ONLY the first instance** will be synchronized in this version!!
 
 2. **Secret_Server_secret.yaml**: This yaml file holds the secret information for the connection to the Secret Server in json format and is the coded as base64.
 
