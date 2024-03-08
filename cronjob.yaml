@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dss-syncer
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: dss-syncer
+            image: wessenstam/dss-sync:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - /usr/bin/python3
+            - /script/secrets_sync.py
+            volumeMounts:
+            - name: config-vol
+              mountPath: /etc/config
+            - name: secrets
+              mountPath: /etc/secrets
+              readOnly: true
+          restartPolicy: Never    
+          volumes:
+            - name: config-vol
+              configMap:
+                name: secrets-items
+                items:
+                - key: secrets
+                  path: secrets.txt
+            - name: secrets
+              secret:
+                secretName: creds-secretserver  
